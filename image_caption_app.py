@@ -41,9 +41,14 @@ if uploaded_file:
         else:
             # Show status and response text for diagnosis
             st.error(f"Error {status}: {result}")
-
-# For debugging locally, you can print logs to console:
-st.write("\n--- Debug Info ---")
-st.write(f"Endpoint: {API_URL}")
-st.write(f"Status: {status if 'status' in locals() else 'n/a'}")
-st.write(f"Response: {result if 'result' in locals() else 'n/a'}")
+if uploaded_file:
+    st.write("### Debug Info")
+    st.write("If you encounter issues, please check the following:")
+    st.write("- Ensure your image is in a supported format (PNG, JPG, JPEG).")
+    st.write("- Check your API token and model endpoint.")
+    st.write("- If the error persists, please contact support with the details above.")
+    # For debugging locally, you can print logs to console:
+    st.write("\n--- Debug Info ---")
+    st.write(f"Endpoint: {API_URL}")
+    st.write(f"Status: {status if 'status' in locals() else 'n/a'}")
+    st.write(f"Response: {result if 'result' in locals() else 'n/a'}")
