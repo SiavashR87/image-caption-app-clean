@@ -3,17 +3,20 @@ import streamlit as st
 import requests
 
 # Configuration
-API_URL = "https://api-inference.huggingface.co/models/Salesforce/blip-image-captioning-base"
+API_URL = "https://api-inference.huggingface.co/models/Salesforce/blip-image-captioning-base?pipeline_tag=image-to-text"
 API_TOKEN = os.getenv("HF_API_TOKEN")
-headers = {"Authorization": f"Bearer {API_TOKEN}"}
+headers = {
+    "Authorization": f"Bearer {API_TOKEN}",
+    "Content-Type": "application/octet-stream"
+}
 
 def query(file_obj):
-    files = {"file": file_obj.getvalue()}
-    response = requests.post(API_URL, headers=headers, files=files)
+    # send raw bytes with correct pipeline tag
+    data = file_obj.getvalue()
+    response = requests.post(API_URL, headers=headers, data=data)
     try:
         return response.json(), response.status_code
     except ValueError:
-        # Return parsed error as text
         return {"error": response.text}, response.status_code
 
 # Streamlit page setup
@@ -44,3 +47,4 @@ if uploaded_file:
                 st.error(result["error"])
             else:
                 st.error(f"Error (status {status}): {result}")
+
